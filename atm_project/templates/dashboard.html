@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Главное меню</h2>
+    <h3>Баланс: {{ balance }} руб.</h3>
+    
+    <a href="{{ url_for('withdraw') }}" class="btn">Снять наличные</a>
+    <a href="{{ url_for('deposit') }}" class="btn">Пополнить счет</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-secondary">Завершить работу</a>
+
+    <h4>Последние транзакции</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tx in transactions %}
+            <tr>
+                <td>{{ tx.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td>
+                    {% if tx.trans_type == 'withdraw' %}Снятие
+                    {% elif tx.trans_type == 'deposit' %}Пополнение
+                    {% else %}Проверка баланса{% endif %}
+                </td>
+                <td>{{ tx.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
